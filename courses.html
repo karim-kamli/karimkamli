@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Karim Kamli — Alison Certified Courses</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,600;1,400&family=Jost:wght@200;300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #C9A96E;
+    --gold-light: #E8D5A3;
+    --navy: #0A1628;
+    --navy-mid: #112240;
+    --cream: #F8F4EE;
+    --cream-dark: #EDE8DF;
+    --muted: #8A9BB5;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    background: var(--navy);
+    color: var(--cream);
+    font-family: 'Jost', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+  }
+
+  header {
+    padding: 48px 60px 36px;
+    border-bottom: 1px solid rgba(201,169,110,0.15);
+  }
+  .back-link {
+    color: var(--gold); text-decoration: none;
+    font-size: 0.65rem; letter-spacing: 0.25em; text-transform: uppercase;
+    display: inline-flex; align-items: center; gap: 8px; margin-bottom: 20px;
+    opacity: 0.8; transition: opacity 0.2s;
+  }
+  .back-link:hover { opacity: 1; }
+  h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2rem, 4vw, 3.2rem); font-weight: 300;
+  }
+  h1 em { font-style: italic; color: var(--gold-light); }
+  .header-sub { font-size: 0.7rem; letter-spacing: 0.2em; color: var(--muted); margin-top: 6px; text-transform: uppercase; }
+
+  .stats-strip {
+    display: flex; gap: 2px; margin-top: 28px;
+  }
+  .stat-pill {
+    background: var(--navy-mid); border: 1px solid rgba(201,169,110,0.12);
+    padding: 14px 22px; text-align: center;
+  }
+  .stat-pill .sv { font-family: 'Cormorant Garamond', serif; font-size: 1.8rem; color: var(--gold); display: block; line-height: 1; }
+  .stat-pill .sl { font-size: 0.55rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); margin-top: 4px; }
+
+  .print-note {
+    margin: 0 60px; margin-top: 24px;
+    padding: 14px 20px;
+    background: rgba(201,169,110,0.06); border-left: 2px solid var(--gold);
+    font-size: 0.75rem; color: var(--cream-dark);
+  }
+  .print-note strong { color: var(--gold); }
+
+  main { padding: 40px 60px 80px; }
+
+  .filter-row {
+    display: flex; gap: 8px; margin-bottom: 36px; flex-wrap: wrap;
+  }
+  .filter-btn {
+    padding: 7px 16px; border: 1px solid rgba(201,169,110,0.2);
+    background: none; color: var(--muted); cursor: pointer;
+    font-family: 'Jost', sans-serif; font-size: 0.62rem;
+    letter-spacing: 0.15em; text-transform: uppercase;
+    transition: all 0.2s;
+  }
+  .filter-btn.active, .filter-btn:hover {
+    border-color: var(--gold); color: var(--gold); background: rgba(201,169,110,0.08);
+  }
+
+  .cards-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+  }
+
+  /* ── COURSE CARD ── */
+  .course-card {
+    background: var(--navy-mid);
+    border: 1px solid rgba(201,169,110,0.1);
+    position: relative; overflow: hidden;
+    transition: transform 0.3s, border-color 0.3s, box-shadow 0.3s;
+    cursor: default;
+  }
+  .course-card:hover {
+    transform: translateY(-5px);
+    border-color: rgba(201,169,110,0.35);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+  }
+
+  .card-top {
+    padding: 20px 20px 16px;
+    display: flex; justify-content: space-between; align-items: center;
+    position: relative;
+  }
+  .card-provider { display: flex; align-items: center; gap: 10px; }
+  .alison-logo-text {
+    width: 36px; height: 36px; border-radius: 6px;
+    background: rgba(255,255,255,0.15);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.4rem;
+    font-weight: 600; color: white;
+  }
+  .provider-name { font-size: 0.75rem; font-weight: 500; letter-spacing: 0.15em; color: white; }
+  .provider-sub { font-size: 0.55rem; letter-spacing: 0.1em; color: rgba(255,255,255,0.6); text-transform: uppercase; }
+
+  .score-ring { position: relative; width: 70px; height: 70px; flex-shrink: 0; }
+  .score-text {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'Cormorant Garamond', serif; font-size: 1.2rem; font-weight: 600;
+    line-height: 1;
+  }
+  .score-text span { font-size: 0.55rem; margin-top: 4px; }
+
+  .perfect-badge {
+    position: absolute; top: 0; right: 0;
+    background: #4CAF50; color: white;
+    font-size: 0.5rem; letter-spacing: 0.2em; text-transform: uppercase;
+    padding: 4px 10px; font-weight: 500;
+  }
+
+  .card-body { padding: 16px 20px 20px; }
+  .course-num { font-size: 0.55rem; letter-spacing: 0.2em; color: var(--muted); margin-bottom: 8px; }
+  .course-title-text {
+    font-family: 'Cormorant Garamond', serif; font-size: 1.1rem;
+    color: var(--cream); line-height: 1.35; margin-bottom: 10px;
+  }
+  .course-tag-pill {
+    display: inline-block; padding: 3px 10px;
+    border: 1px solid rgba(201,169,110,0.3);
+    font-size: 0.56rem; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--gold); margin-bottom: 16px;
+  }
+
+  .card-footer-row {
+    display: flex; justify-content: space-between; align-items: flex-end;
+    padding-top: 14px; border-top: 1px solid rgba(255,255,255,0.05);
+  }
+  .di-label { font-size: 0.52rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted); }
+  .di-val { font-size: 0.8rem; color: var(--cream-dark); margin-top: 3px; }
+  .qr-wrap {
+    width: 56px; height: 56px;
+    background: var(--navy-mid); border: 1px solid rgba(201,169,110,0.15);
+    display: flex; align-items: center; justify-content: center; overflow: hidden;
+  }
+  .qr-img { width: 50px; height: 50px; }
+
+  .holder-name {
+    font-size: 0.65rem; letter-spacing: 0.12em; color: var(--gold);
+    margin-top: 12px; text-transform: uppercase;
+  }
+  .study-hours {
+    font-size: 0.56rem; color: var(--muted); margin-top: 3px; letter-spacing: 0.05em;
+  }
+
+  /* Watermark strip at bottom of each card */
+  .course-card::before {
+    content: 'KARIM KAMLI · VERIFIED';
+    position: absolute; bottom: 8px; left: 0; right: 0;
+    text-align: center; font-size: 0.42rem; letter-spacing: 0.25em;
+    color: rgba(201,169,110,0.08); text-transform: uppercase; pointer-events: none;
+  }
+
+  footer {
+    padding: 24px 60px; text-align: center;
+    border-top: 1px solid rgba(255,255,255,0.04);
+    font-size: 0.6rem; letter-spacing: 0.15em; text-transform: uppercase; color: var(--muted);
+  }
+
+  @media(max-width:768px) {
+    header, main { padding: 24px 20px; }
+    .stats-strip { flex-wrap: wrap; }
+    .print-note { margin: 16px 20px; }
+    footer { padding: 20px; }
+  }
+
+  @media print {
+    body { background: white; color: black; }
+    .back-link, .filter-row, .print-note { display: none; }
+    .course-card { break-inside: avoid; border: 1px solid #ccc; }
+    header { padding: 20px; }
+    main { padding: 20px; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <a href="index.html" class="back-link">← Back to Portfolio</a>
+  <h1>Alison <em>Certified Courses</em></h1>
+  <p class="header-sub">Karim Kamli — Independent Learner Record · All scores certified by Alison Director of Certification</p>
+  <div class="stats-strip">
+    <div class="stat-pill"><span class="sv">476</span><span class="sl">Study Hours</span></div>
+    <div class="stat-pill"><span class="sv">13</span><span class="sl">Courses</span></div>
+    <div class="stat-pill"><span class="sv">90%</span><span class="sl">Avg Score</span></div>
+    <div class="stat-pill"><span class="sv">100%</span><span class="sl">Top Score</span></div>
+    <div class="stat-pill"><span class="sv">2023–26</span><span class="sl">Period</span></div>
+  </div>
+</header>
+
+<div class="print-note">
+  💡 <strong>Recruiters:</strong> These cards are generated from Karim Kamli's verified Alison Learner Record. Scan any QR code or visit alison.com to verify. All scores are independently certified. <strong>Full learner record available on request.</strong>
+</div>
+
+<main>
+  <div class="filter-row">
+    <button class="filter-btn active" onclick="filterCards('all', this)">All (13)</button>
+    <button class="filter-btn" onclick="filterCards('Aviation', this)">✈ Aviation</button>
+    <button class="filter-btn" onclick="filterCards('Safety', this)">🩺 Safety</button>
+    <button class="filter-btn" onclick="filterCards('French', this)">🇫🇷 French</button>
+    <button class="filter-btn" onclick="filterCards('English', this)">🇬🇧 English</button>
+    <button class="filter-btn" onclick="filterCards('German', this)">🇩🇪 German</button>
+    <button class="filter-btn" onclick="filterCards('Perfect', this)">⭐ 100%</button>
+  </div>
+
+  <div class="cards-grid" id="cardsGrid">
+
+    <div class="course-card" data-score="88">
+      <div class="card-top" style="background: linear-gradient(135deg, #1a4a7acc, #1a4a7a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#E8D5A3" stroke-width="4"
+              stroke-dasharray="154.8 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#E8D5A3">88<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#01</div>
+        <div class="course-title-text">Diploma in Airline Cabin Crew Service</div>
+        <div class="course-tag-pill">Aviation Core</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">March 2026</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+Diploma+in+Airline+Cabin+Crew+Service+-+Score:+88%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="96">
+      <div class="card-top" style="background: linear-gradient(135deg, #1a4a7acc, #1a4a7a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#C9A96E" stroke-width="4"
+              stroke-dasharray="168.9 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#C9A96E">96<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#02</div>
+        <div class="course-title-text">Crew Management in Multi-Pilot Aircraft</div>
+        <div class="course-tag-pill">Aviation CRM</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">March 2026</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+Crew+Management+in+Multi-Pilot+Aircraft+-+Score:+96%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="100">
+      <div class="card-top" style="background: linear-gradient(135deg, #1a6a3acc, #1a6a3a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#4CAF50" stroke-width="4"
+              stroke-dasharray="175.9 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#4CAF50">100<span>%</span></div>
+        </div>
+      </div>
+      <div class="perfect-badge">PERFECT</div>
+      <div class="card-body">
+        <div class="course-num">#03</div>
+        <div class="course-title-text">First Aid Training in the Workplace</div>
+        <div class="course-tag-pill">Safety — Perfect</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">December 2023</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+First+Aid+Training+in+the+Workplace+-+Score:+100%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="92">
+      <div class="card-top" style="background: linear-gradient(135deg, #1a6a3acc, #1a6a3a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#C9A96E" stroke-width="4"
+              stroke-dasharray="161.9 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#C9A96E">92<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#04</div>
+        <div class="course-title-text">CPR, AED and First Aid</div>
+        <div class="course-tag-pill">Safety</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">March 2026</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+CPR,+AED+and+First+Aid+-+Score:+92%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="90">
+      <div class="card-top" style="background: linear-gradient(135deg, #1a6a3acc, #1a6a3a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#C9A96E" stroke-width="4"
+              stroke-dasharray="158.3 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#C9A96E">90<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#05</div>
+        <div class="course-title-text">Diploma in First Aid and Safety</div>
+        <div class="course-tag-pill">Safety</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">March 2026</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+Diploma+in+First+Aid+and+Safety+-+Score:+90%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="92">
+      <div class="card-top" style="background: linear-gradient(135deg, #4a1a7acc, #4a1a7a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#C9A96E" stroke-width="4"
+              stroke-dasharray="161.9 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#C9A96E">92<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#06</div>
+        <div class="course-title-text">Safeguarding Children & Vulnerable Adults</div>
+        <div class="course-tag-pill">Child Safety</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">January 2024</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+Safeguarding+Children+&+Vulnerable+Adults+-+Score:+92%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="88">
+      <div class="card-top" style="background: linear-gradient(135deg, #7a1a2acc, #7a1a2a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#E8D5A3" stroke-width="4"
+              stroke-dasharray="154.8 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#E8D5A3">88<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#07</div>
+        <div class="course-title-text">Diploma in French Language Studies</div>
+        <div class="course-tag-pill">French</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">August 2023</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+Diploma+in+French+Language+Studies+-+Score:+88%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="91">
+      <div class="card-top" style="background: linear-gradient(135deg, #7a1a2acc, #7a1a2a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#C9A96E" stroke-width="4"
+              stroke-dasharray="160.1 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#C9A96E">91<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#08</div>
+        <div class="course-title-text">English for Business & Tourism</div>
+        <div class="course-tag-pill">English</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">September 2023</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+English+for+Business+&+Tourism+-+Score:+91%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="92">
+      <div class="card-top" style="background: linear-gradient(135deg, #7a1a2acc, #7a1a2a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#C9A96E" stroke-width="4"
+              stroke-dasharray="161.9 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#C9A96E">92<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#09</div>
+        <div class="course-title-text">German for Beginners</div>
+        <div class="course-tag-pill">German</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">March 2026</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+German+for+Beginners+-+Score:+92%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="88">
+      <div class="card-top" style="background: linear-gradient(135deg, #7a1a2acc, #7a1a2a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#E8D5A3" stroke-width="4"
+              stroke-dasharray="154.8 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#E8D5A3">88<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#10</div>
+        <div class="course-title-text">German for Customer Service & Sales</div>
+        <div class="course-tag-pill">German</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">March 2026</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+German+for+Customer+Service+&+Sales+-+Score:+88%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="83">
+      <div class="card-top" style="background: linear-gradient(135deg, #4a3a1acc, #4a3a1a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#E8D5A3" stroke-width="4"
+              stroke-dasharray="146.0 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#E8D5A3">83<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#11</div>
+        <div class="course-title-text">Diploma in Community Psychology</div>
+        <div class="course-tag-pill">Psychology</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">March 2026</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+Diploma+in+Community+Psychology+-+Score:+83%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="80">
+      <div class="card-top" style="background: linear-gradient(135deg, #4a3a1acc, #4a3a1a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#E8D5A3" stroke-width="4"
+              stroke-dasharray="140.7 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#E8D5A3">80<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#12</div>
+        <div class="course-title-text">Workplace Communication Basics</div>
+        <div class="course-tag-pill">Communication</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">March 2026</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+Workplace+Communication+Basics+-+Score:+80%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+
+    <div class="course-card" data-score="95">
+      <div class="card-top" style="background: linear-gradient(135deg, #1a4a4acc, #1a4a4a44);">
+        <div class="card-provider">
+          <div class="alison-logo-text">A</div>
+          <div>
+            <div class="provider-name">ALISON</div>
+            <div class="provider-sub">Certified Course</div>
+          </div>
+        </div>
+        <div class="score-ring">
+          <svg width="70" height="70" viewBox="0 0 70 70">
+            <circle cx="35" cy="35" r="28" fill="none" stroke="rgba(255,255,255,0.1)" stroke-width="4"/>
+            <circle cx="35" cy="35" r="28" fill="none" stroke="#C9A96E" stroke-width="4"
+              stroke-dasharray="167.1 175.9"
+              stroke-dashoffset="44.0"
+              stroke-linecap="round"/>
+          </svg>
+          <div class="score-text" style="color:#C9A96E">95<span>%</span></div>
+        </div>
+      </div>
+      
+      <div class="card-body">
+        <div class="course-num">#13</div>
+        <div class="course-title-text">Physical Education — Coaching Styles</div>
+        <div class="course-tag-pill">Leadership</div>
+        <div class="card-footer-row">
+          <div class="date-issued">
+            <div class="di-label">Issued</div>
+            <div class="di-val">January 2024</div>
+          </div>
+          <div class="qr-wrap">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?size=80x80&data=https://alison.com/learner/karim-kamli+-+Physical+Education+—+Coaching+Styles+-+Score:+95%&color=C9A96E&bgcolor=112240&margin=4" alt="QR verify" class="qr-img" onerror="this.style.display='none'"/>
+          </div>
+        </div>
+        <div class="holder-name">Karim Kamli</div>
+        <div class="study-hours">Total Study: 476+ hours · Alison Learner Record</div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<footer>
+  Karim Kamli — Alison Certified Courses · kamli.karimcf@gmail.com · Learner Record: 476+ Hours
+</footer>
+
+<script>
+function filterCards(tag, btn) {
+  document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.course-card').forEach(card => {
+    if (tag === 'all') {
+      card.style.display = '';
+    } else if (tag === 'Perfect') {
+      card.style.display = card.dataset.score === '100' ? '' : 'none';
+    } else {
+      const tagEl = card.querySelector('.course-tag-pill');
+      card.style.display = tagEl && tagEl.textContent.includes(tag) ? '' : 'none';
+    }
+  });
+}
+</script>
+</body>
+</html>
